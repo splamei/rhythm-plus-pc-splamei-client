@@ -13,7 +13,7 @@
  *  limitations under the License.
  */
 
-const { app, BrowserWindow, Menu, session, dialog, shell } = require("electron");
+const { app, BrowserWindow, Menu, session, dialog, shell, ipcMain } = require("electron");
 const windowStateKeeper = require("electron-window-state");
 const path = require("path");
 const fs = require("fs");
@@ -49,8 +49,88 @@ console.log(`Using app data '${userDataPath}'`);
 const dataPathLocation = path.join(userDataPath, "Browser", "Data");
 const cachePathLocation = path.join(userDataPath, "Browser", "Cache");
 const extensionPathLocation = path.join(userDataPath, "Extensions");
+const settingsPathLocation = path.join(userDataPath, 'settings.json');
 
 const clientUserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) RhythmPlus-SplameiClient/1000 (KHTML, like Gecko) Chrome/150.0.0.0";
+
+// -- Settings stuff --
+
+const defaultSettings = {
+    v2Mode: false,
+    showMenu: "alwaysExceptGame"
+};
+
+let settingsWindow = null;
+
+function loadSettings()
+{
+    try
+    {
+        if (fs.existsSync(settingsPathLocation))
+        {
+            const data = fs.readFileSync(settingsPathLocation, "utf8");
+            const storedSettings = JSON.parse(data);
+            return { ...defaultSettings, ...storedSettings };
+        }
+    }
+    catch (ex)
+    {
+        console.error("Failed to read the settings file! - ", ex);
+    }
+
+    return defaultSettings;
+}
+
+function saveSettings(settings)
+{
+    try
+    {
+        fs.writeFileSync(settingsPathLocation, JSON.stringify(settings, null, 4), "utf8");
+        return true;
+    }
+    catch (ex)
+    {
+        console.error("Error saving the settings file! -", ex);
+        return false
+    }
+}
+
+function showSettings(parentWindow)
+{
+    if (settingsWindow)
+    {
+        settingsWindow.focus();
+        return;
+    }
+
+    settingsWindow = new BrowserWindow({
+        width: 500,
+        height: 600,
+        title: 'Settings',
+        parent: parentWindow,
+        modal: true,
+        resizable: false,
+        autoHideMenuBar: true,
+        fullscreenable: false,
+        icon: path.join(__dirname, "assets/icon.png"),
+        webPreferences: {
+            preload: path.join(__dirname, "preload.js"),
+            nodeIntegration: false,
+            contextIsolation: true
+        }
+    });
+
+    settingsWindow.loadFile("settings.html");
+
+    settingsWindow.on("closed", () => {
+        settingsWindow = null;
+    });
+}
+
+ipcMain.handle("get-settings", () => loadSettings());
+ipcMain.handle("save-settings", (event, newSettings) => saveSettings(newSettings));
+
+let settings = loadSettings();
 
 // -- Browser setup --
 
@@ -150,7 +230,14 @@ function createWindow()
 
     console.log("Created the browser window and got it managed by the window state!")
 
-    mainWindow.loadURL("https://v2.rhythm-plus.com");
+    if (settings.v2Mode)
+    {
+        mainWindow.loadURL("https://v2.rhythm-plus.com");
+    }
+    else
+    {
+        mainWindow.loadURL("https://rhythm-plus.com");
+    }
 
     console.log("Now loading!")
 
@@ -280,6 +367,12 @@ function displayAppMenu()
                     label: "Reload",
                     accelerator: "CmdOrCtrl+R",
                     click: () => mainWindow.reload()
+                },
+                { type: "separator" },
+                {
+                    label: "Settings",
+                    accelerator: "CmdOrCtrl+S",
+                    click: () => showSettings(mainWindow)
                 },
                 { type: "separator" },
                 { role: "quit" }
