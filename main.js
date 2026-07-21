@@ -1,0 +1,347 @@
+/*  Copyright 2026 Splamei
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
+const { app, BrowserWindow, Menu, session, dialog, shell } = require("electron");
+const windowStateKeeper = require("electron-window-state");
+const path = require("path");
+const fs = require("fs");
+const log = require('electron-log/main');
+
+// -- Logging --
+
+const logFileLocation = path.join(app.getPath("userData"), "Logs", "App.log");
+
+log.transports.file.resolvePathFn = () => {
+  return logFileLocation;
+};
+
+Object.assign(console, log.functions);
+log.transports.file.level = "debug";
+log.transports.file.format = "[{y}-{m}-{d} {h}:{i}:{s}.{ms}] [{level}] {text}";
+
+console.log(`Saving logs too '${logFileLocation}'!`)
+
+// -- Arg setup --
+
+app.commandLine.appendSwitch('ignore-gpu-blocklist');
+app.commandLine.appendSwitch('enable-gpu-rasterization');
+app.commandLine.appendSwitch('enable-zero-copy');
+app.commandLine.appendSwitch('enable-webgl');
+app.commandLine.appendSwitch('enable-features', 'CanvasOopRasterization');
+
+// -- Variable setup --
+
+const userDataPath = app.getPath('userData');
+console.log(`Using app data '${userDataPath}'`);
+
+const dataPathLocation = path.join(userDataPath, "Browser", "Data");
+const cachePathLocation = path.join(userDataPath, "Browser", "Cache");
+const extensionPathLocation = path.join(userDataPath, "Extensions");
+
+const clientUserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) RhythmPlus-SplameiClient/1000 (KHTML, like Gecko) Chrome/150.0.0.0";
+
+// -- Browser setup --
+
+app.setPath("userData", dataPathLocation);
+app.setPath("sessionData", cachePathLocation);
+
+let mainWindow;
+const loadedExtensions = [];
+
+// -- Window setup --
+
+function createWindow()
+{
+    let mainWindowState = windowStateKeeper({
+        defaultWidth: 1280,
+        defaultHeight: 720
+    });
+
+    console.log("Loaded window state")
+
+    mainWindow = new BrowserWindow({
+        x: mainWindowState.x,
+        y: mainWindowState.y,
+        width: mainWindowState.width,
+        height: mainWindowState.height,
+        icon: path.join(__dirname, 'assets/icon.png'),
+        show: false,
+        fullscreenable: true,
+        userAgent: clientUserAgent,
+        webPreferences: {
+            backgroundThrottling: false,
+            contextIsolation: true,
+            nodeIntegration: false
+        }
+    });
+
+    mainWindowState.manage(mainWindow);
+
+    mainWindow.on("page-title-updated", (event, title) => {
+        event.preventDefault();
+
+        var newTitle = ""
+        if (title.startsWith("Rhythm Plus - Online Rhythm Game"))
+        {
+            newTitle = "Rhythm Plus - Splamei Client"
+        }
+        else
+        {
+            newTitle = title.replace("Rhythm Plus Music Game", "Rhythm Plus Splamei Client").replace("Rhythm+ Music Game", "Rhythm Plus Splamei Client")
+        }
+
+        mainWindow.setTitle(newTitle);
+    })
+
+    mainWindow.once("ready-to-show", () => {
+        console.log("Loaded!")
+        mainWindow.show();
+
+        dialog.showMessageBox(mainWindow, {
+            type: 'warning',
+            title: "Rhythm Plus Splamei Client",
+            detail: "This Electron version of the client is still in early development so not all features are added or stable. Using this client currently is at your own risk!",
+            buttons: ['OK']
+        });
+    });
+
+    mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+        if (!url.includes("about:blank"))
+        {
+            shell.openExternal(url)
+            return { action: "deny" };
+        }
+
+        return {
+            action: "allow",
+            overrideBrowserWindowOptions: {
+                width: 900,
+                height: 750,
+                title: "Rhythm Plus Splamei Client",
+                icon: path.join(__dirname, 'assets/icon.png'),
+                autoHideMenuBar: true,
+                fullscreenable: false,
+                webPreferences: {
+                    contextIsolation: true,
+                    nodeIntegration: false
+                }
+            }
+        };
+    });
+
+    mainWindow.webContents.on('did-create-window', (popupWindow) => {
+        popupWindow.webContents.setWindowOpenHandler(({ url }) => {
+            shell.openExternal(url);
+            return { action: "deny" };
+        });
+    });
+
+    console.log("Created the browser window and got it managed by the window state!")
+
+    mainWindow.loadURL("https://v2.rhythm-plus.com");
+
+    console.log("Now loading!")
+
+    displayAppMenu();
+}
+
+// -- Extension stuff --
+
+function getPopupPath(manifest)
+{
+    if (manifest.action && manifest.action.default_popup)
+    {
+        return manifest.action.default_popup;
+    }
+    if (manifest.browser_action && manifest.browser_action.default_popup)
+    {
+        return manifest.browser_action.default_popup;
+    }
+    if (manifest.page_action && manifest.page_action.default_popup)
+    {
+        return manifest.page_action.default_popup;
+    }
+
+    return null;
+}
+
+async function loadExtensions()
+{
+    console.log("Loading extensions")
+
+    if (!fs.existsSync(extensionPathLocation))
+    {
+        console.log("Not loading extensions because the directory does not exist!")
+        fs.mkdirSync(extensionPathLocation, { recursive: true });
+        return;
+    }
+
+    const entries = fs.readdirSync(extensionPathLocation, { withFileTypes: true });
+
+    for (const entry of entries)
+    {
+        if (entry.isDirectory())
+        {
+            const extFolder = path.join(extensionPathLocation, entry.name);
+            const manifestFile = path.join(extFolder, "manifest.json");
+
+            if (fs.existsSync(manifestFile))
+            {
+                try
+                {
+                    const manifest = JSON.parse(fs.readFileSync(manifestFile, "utf8"));
+                    const popupRelative = getPopupPath(manifest);
+
+                    const ext = await session.defaultSession.extensions.loadExtension(extFolder, {
+                        allowFileAccess: false
+                    });
+
+                    loadedExtensions.push({
+                        id: ext.id,
+                        name: ext.name || manifest.name || entry.name,
+                        popupPath: popupRelative
+                    });
+
+                    console.log(`Loaded the extension '${ext.name}'! (ID: ${ext.id})`)
+                }
+                catch (ex)
+                {
+                    console.error(`Failed to load the extension in dir '${entry.name}'!`, ex.message);
+                }
+            }
+        }
+    }
+}
+
+// -- Menu strip thingy --
+
+function displayAppMenu()
+{
+    console.log("Displaying the menu")
+
+    const extensionMenuItems = loadedExtensions.length > 0
+        ? loadedExtensions.map(ext => ({
+            label: ext.name,
+            click: () => {
+                if (!ext.popupPath)
+                {
+                    dialog.showMessageBox(mainWindow, {
+                        type: "warning",
+                        title: ext.name,
+                        message: "This extension doesn't have a page we can display set for it.\n\nIt may not have a page set or it's configured in a way that stopped us from finding it"
+                    });
+                    console.log(`Unable to show page for extension '${ext.name}'! (No popup path)`);
+                    return;
+                }
+
+                console.log(`Showing popup for extension '${ext.name}' via URL 'chrome-extension://${ext.id}/${ext.popupPath}'!`)
+
+                const popup = new BrowserWindow({
+                    width: 450,
+                    height: 550,
+                    title: ext.name,
+                    autoHideMenuBar: true,
+                    fullscreenable: true,
+                    icon: path.join(__dirname, 'assets/icon.png'),
+                    title: "Rhythm Plus - Splamei Client",
+                    userAgent: clientUserAgent,
+                    webPreferences: {
+                        contextIsolation: true
+                    }
+                });
+
+                popup.loadURL(`chrome-extension://${ext.id}/${ext.popupPath}`);
+            }
+        }))
+    : [{ label: "No extensions are installed", enabled: false }];
+
+    const menuTemplate = [
+        {
+            label: "File",
+            submenu: [
+                {
+                    label: "Toggle Fullscreen",
+                    accelerator: "F11",
+                    click: () => mainWindow.setFullScreen(!mainWindow.isFullScreen())
+                    },
+                {
+                    label: "Reload",
+                    accelerator: "CmdOrCtrl+R",
+                    click: () => mainWindow.reload()
+                },
+                { type: "separator" },
+                { role: "quit" }
+            ]
+        },
+        {
+            label: "View",
+            submenu: [
+                { role: "zoomIn", accelerator: "CmdOrCtrl+Plus" },
+                { role: "zoomOut", accelerator: "CmdOrCtrl+-" },
+                { role: "resetZoom", accelerator: "CmdOrCtrl+0" },
+                { type: "separator" },
+                { role: "toggleDevTools", accelerator: "F12" }
+            ]
+        },
+        {
+            label: "Extentions",
+            submenu: extensionMenuItems
+        },
+        {
+            label: "Help",
+            submenu: [
+                {
+                    label: "Star on GitHub",
+                    click: () => shell.openExternal("https://github.com/splamei/rhythm-plus-splamei-client-electron")
+                },
+                { type: "separator" },
+                {
+                    label: "Get Help",
+                    click: () => shell.openExternal("https://www.veemo.uk/help")
+                },
+                {
+                    label: "About",
+                    click: (menuItem, focusedWindow) => showAboutDialog(focusedWindow)
+                }
+            ]
+        }
+    ];
+
+    Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplate));
+}
+
+// -- About --
+
+function showAboutDialog(parentWindow) {
+  dialog.showMessageBox(parentWindow, {
+    type: 'info',
+    title: "About - Rhythm Plus Splamei Client",
+    message: "About the client",
+    detail: `A client to play the Rhythm Plus music game in an app right on your device\n\nVersion: ${app.getVersion()}\nNode: ${process.versions.node}\nElectron: ${process.versions.electron}\n\nMade with <3 by Splamei`,
+    buttons: ['OK']
+  });
+}
+
+// -- Other stuff --
+
+app.whenReady().then(async () => {
+    console.log("Ready! Now loading extensions and creating the window")
+    await loadExtensions();
+    createWindow();
+});
+
+app.on("window-all-closed", () => {
+    if (process.platform !== "darwin") { console.log("Now closing"); app.quit(); }
+});

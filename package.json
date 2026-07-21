@@ -1,0 +1,43 @@
+{
+  "name": "rplus-splamei-client-pc",
+  "version": "2.0.0",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build:win": "electron-builder --win portable",
+    "build:linux": "electron-builder --linux AppImage"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "Apache-2.0",
+  "description": "",
+  "devDependencies": {
+    "electron": "^43.1.1",
+    "electron-builder": "^26.15.3"
+  },
+  "build": {
+    "appId": "com.splamei.rplus-client.pc",
+    "productName": "Rhythm Plus - Splamei Client",
+    "win": {
+      "target": "portable",
+      "icon": "build/icon.ico",
+      "signExecutable": false,
+      "signAndEditExecutable": false,
+      "compression": "store"
+    },
+    "linux": {
+      "target": [
+        "AppImage"
+      ],
+      "icon": "assets/icon.png",
+      "category": "Game"
+    }
+  },
+  "dependencies": {
+    "electron-log": "^5.4.4",
+    "electron-window-state": "^5.0.3"
+  },
+  "overrides": {
+    "@noble/hashes": "1.8.0"
+  }
+}
