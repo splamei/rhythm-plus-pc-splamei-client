@@ -53,6 +53,8 @@ const settingsPathLocation = path.join(userDataPath, 'settings.json');
 
 const clientUserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) RhythmPlus-SplameiClient/1000 (KHTML, like Gecko) Chrome/150.0.0.0";
 
+let wasGamePage = false;
+
 // -- Settings stuff --
 
 const defaultSettings = {
@@ -226,6 +228,30 @@ function createWindow()
             shell.openExternal(url);
             return { action: "deny" };
         });
+    });
+
+    mainWindow.webContents.on("did-navigate-in-page", (event, url, isMainFrame) => {
+        if (settings.showMenu == "alwaysExceptGame")
+        {
+            if (url.includes("/game/") && !wasGamePage)
+            {
+                wasGamePage = true;
+                Menu.setApplicationMenu(null);
+                console.log("Now in-game so hiding menu!")
+            }
+            else if (wasGamePage)
+            {
+                wasGamePage = false;
+                displayAppMenu();
+                console.log("Now out of the game so showing menu!")
+            }
+        }
+        else if (settings.showMenu == "always" && wasGamePage)
+        {
+            wasGamePage = false;
+            displayAppMenu();
+            console.log("Mode set to always so now showing the menu!")
+        }
     });
 
     console.log("Created the browser window and got it managed by the window state!")
