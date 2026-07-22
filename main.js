@@ -153,7 +153,7 @@ function createWindow()
         defaultHeight: 720
     });
 
-    console.log("Loaded window state")
+    console.log("Loaded window state");
 
     mainWindow = new BrowserWindow({
         x: mainWindowState.x,
@@ -188,7 +188,7 @@ function createWindow()
         }
 
         mainWindow.setTitle(newTitle);
-    })
+    });
 
     mainWindow.once("ready-to-show", () => {
         console.log("Loaded!")
