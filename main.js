@@ -160,6 +160,7 @@ function createWindow()
         width: mainWindowState.width,
         height: mainWindowState.height,
         icon: path.join(__dirname, 'assets/icon.png'),
+        title: "Rhythm Plus Splamei Client",
         show: false,
         fullscreenable: true,
         userAgent: clientUserAgent,
