@@ -149,6 +149,8 @@ function showSettings(parentWindow)
         }
     });
 
+    settingsWindow.removeMenu();
+
     settingsWindow.loadFile("settings.html");
 
     settingsWindow.on("closed", () => {
@@ -169,6 +171,13 @@ app.setPath("sessionData", cachePathLocation);
 let mainWindow;
 let navigationHistory;
 const loadedExtensions = [];
+
+app.on("browser-window-created", (event, createWindow) => {
+    if (createWindow !== mainWindow)
+    {
+        createWindow.removeMenu();
+    }
+})
 
 // -- Window setup --
 
@@ -437,6 +446,7 @@ function displayAppMenu()
                             allowRunningInsecureContent: false
                         }
                     });
+                    popup.removeMenu();
 
                     popup.loadURL(`chrome-extension://${ext.id}/${ext.popupPath}`);
                 }
