@@ -146,7 +146,8 @@ function showSettings(parentWindow)
             nodeIntegration: false,
             sandbox: true,
             webSecurity: true,
-            allowRunningInsecureContent: false
+            allowRunningInsecureContent: false,
+            devTools: !app.isPackaged
         }
     });
 
@@ -213,7 +214,8 @@ function createWindow()
             nodeIntegration: false,
             sandbox: true,
             webSecurity: true,
-            allowRunningInsecureContent: false
+            allowRunningInsecureContent: false,
+            devTools: !app.isPackaged
         }
     });
 
@@ -285,7 +287,8 @@ function createWindow()
                     nodeIntegration: false,
                     sandbox: true,
                     webSecurity: true,
-                    allowRunningInsecureContent: false
+                    allowRunningInsecureContent: false,
+                    devTools: !app.isPackaged
                 }
             }
         };
@@ -450,7 +453,8 @@ function displayAppMenu()
                             nodeIntegration: false,
                             sandbox: true,
                             webSecurity: true,
-                            allowRunningInsecureContent: false
+                            allowRunningInsecureContent: false,
+                            devTools: !app.isPackaged
                         }
                     });
                     popup.removeMenu();
@@ -502,8 +506,6 @@ function displayAppMenu()
                 { role: "zoomIn", accelerator: "CmdOrCtrl+Plus" },
                 { role: "zoomOut", accelerator: "CmdOrCtrl+-" },
                 { role: "resetZoom", accelerator: "CmdOrCtrl+0" },
-                { type: "separator" },
-                { role: "toggleDevTools", accelerator: "F12" }
             ]
         },
         {
