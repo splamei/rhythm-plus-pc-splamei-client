@@ -18,6 +18,7 @@ const windowStateKeeper = require("electron-window-state");
 const path = require("path");
 const fs = require("fs");
 const log = require('electron-log/main');
+const { permission } = require("process");
 
 // -- Instance lock --
 
@@ -178,6 +179,12 @@ app.on("browser-window-created", (event, createWindow) => {
         createWindow.removeMenu();
     }
 })
+
+app.whenReady().then(() => {
+    session.defaultSession.setPermissionRequestHandler((webContents, permission, callback) => {
+        callback(false);
+    });
+});
 
 // -- Window setup --
 
