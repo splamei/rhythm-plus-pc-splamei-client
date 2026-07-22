@@ -141,6 +141,7 @@ app.setPath("userData", dataPathLocation);
 app.setPath("sessionData", cachePathLocation);
 
 let mainWindow;
+let navigationHistory;
 const loadedExtensions = [];
 
 // -- Window setup --
@@ -257,6 +258,8 @@ function createWindow()
             console.log("Mode set to always so now showing the menu!")
         }
     });
+
+    navigationHistory = mainWindow.webContents.navigationHistory;
 
     console.log("Created the browser window and got it managed by the window state!")
 
@@ -442,6 +445,39 @@ function displayAppMenu()
         {
             label: "Navigation",
             submenu: [
+                {
+                    label: "Go forward",
+                    click: () => {
+                        try
+                        {
+                            if (navigationHistory.canGoForward())
+                            {
+                                navigationHistory.goForward();
+                            }
+                        }
+                        catch (ex)
+                        {
+                            console.error("Failed to move forward! -", ex);
+                        }
+                    }
+                },
+                {
+                    label: "Go back",
+                    click: () => {
+                        try
+                        {
+                            if (navigationHistory.canGoBack())
+                            {
+                                navigationHistory.goBack();
+                            }
+                        }
+                        catch (ex)
+                        {
+                            console.error("Failed to move back! -", ex);
+                        }
+                    }
+                },
+                { type: "separator" },
                 {
                     label: "Copy URL",
                     accelerator: "CmdOrCtrl+Alt+C",
