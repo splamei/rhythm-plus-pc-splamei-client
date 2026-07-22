@@ -13,7 +13,7 @@
  *  limitations under the License.
  */
 
-const { app, BrowserWindow, Menu, session, dialog, shell, ipcMain } = require("electron");
+const { app, BrowserWindow, Menu, session, dialog, shell, ipcMain, clipboard } = require("electron");
 const windowStateKeeper = require("electron-window-state");
 const path = require("path");
 const fs = require("fs");
@@ -54,6 +54,7 @@ const settingsPathLocation = path.join(userDataPath, 'settings.json');
 const clientUserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) RhythmPlus-SplameiClient/1000 (KHTML, like Gecko) Chrome/150.0.0.0";
 
 let wasGamePage = false;
+let currentUrl = "";
 
 // -- Settings stuff --
 
@@ -231,6 +232,8 @@ function createWindow()
     });
 
     mainWindow.webContents.on("did-navigate-in-page", (event, url, isMainFrame) => {
+        currentUrl = url;
+
         if (settings.showMenu == "alwaysExceptGame")
         {
             if (url.includes("/game/") && !wasGamePage)
@@ -425,6 +428,37 @@ function displayAppMenu()
             ]
         },
         {
+            label: "Navigation",
+            submenu: [
+                {
+                    label: "Copy URL",
+                    click: () => {
+                        try
+                        {
+                            if (currentUrl == null)
+                            {
+                                showDialogMessage(mainWindow, "error", "Unable to copy", "We can't copy the URL because we don't currently have the URL stored. You may be able to fix this by changing the page then going back");
+                            }
+                            else
+                            {
+                                clipboard.writeText(currentUrl);
+                                showDialogMessage(mainWindow, "info", "The current URL has been copied!", "");
+                            }
+                        }
+                        catch (ex)
+                        {
+                            console.error("Failed to copy the current URL to the clipboard! -", ex);
+                            showDialogMessage(mainWindow, "error", "Unable to copy", "We can't copy the URL because something went wrong during the copy. You may be able to fix this by changing the page then going back");
+                        }
+                    }
+                },
+                {
+                    label: "To a URL",
+                    click: () => showSettings(mainWindow)
+                }
+            ]
+        },
+        {
             label: "Extentions",
             submenu: extensionMenuItems
         },
@@ -454,13 +488,24 @@ function displayAppMenu()
 // -- About --
 
 function showAboutDialog(parentWindow) {
-  dialog.showMessageBox(parentWindow, {
-    type: 'info',
-    title: "About - Rhythm Plus Splamei Client",
-    message: "About the client",
-    detail: `A client to play the Rhythm Plus music game in an app right on your device\n\nVersion: ${app.getVersion()}\nNode: ${process.versions.node}\nElectron: ${process.versions.electron}\n\nMade with <3 by Splamei`,
-    buttons: ['OK']
-  });
+    dialog.showMessageBox(parentWindow, {
+        type: 'info',
+        title: "About - Rhythm Plus Splamei Client",
+        message: "About the client",
+        detail: `A client to play the Rhythm Plus music game in an app right on your device\n\nVersion: ${app.getVersion()}\nNode: ${process.versions.node}\nElectron: ${process.versions.electron}\n\nMade with <3 by Splamei`,
+        buttons: ['OK']
+    });
+}
+
+function showDialogMessage(parentWindow, type, message, detail)
+{
+    dialog.showMessageBox(parentWindow, {
+        type: type,
+        title: "Rhythm Plus Splamei Client",
+        message: message,
+        detail: detail,
+        buttons: ['OK']
+    });
 }
 
 // -- Other stuff --
