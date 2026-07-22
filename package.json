@@ -8,9 +8,9 @@
     "build:linux": "electron-builder --linux AppImage"
   },
   "keywords": [],
-  "author": "",
+  "author": "Splamei",
   "license": "Apache-2.0",
-  "description": "",
+  "description": "A client to play the Rhythm Plus music game in an app right on your device",
   "devDependencies": {
     "electron": "^43.1.1",
     "electron-builder": "^26.15.3"
@@ -22,7 +22,7 @@
       "target": "portable",
       "icon": "build/icon.ico",
       "signExecutable": false,
-      "signAndEditExecutable": false,
+      "signAndEditExecutable": true,
       "compression": "store"
     },
     "linux": {
