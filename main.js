@@ -454,7 +454,29 @@ function displayAppMenu()
                 },
                 {
                     label: "To a URL",
-                    click: () => showSettings(mainWindow)
+                    click: () => {
+                        try
+                        {
+                            const clipboardContent = clipboard.readText();
+                            if (clipboardContent == null || clipboardContent.length < 1)
+                            {
+                                showDialogMessage(mainWindow, "error", "Unable to nagivate", "We can't nagivate because your clipboard is empty or it's latest content isn't text. Please copy the URL you want to nagivate and try again.");
+                            }
+                            else if (!clipboardContent.includes("rhythm-plus.com/"))
+                            {
+                                showDialogMessage(mainWindow, "error", "Unable to nagivate", "We can't nagivate because the latest entry in your clipboard isn't a Rhythm Plus URL! Please make sure you copy a valid Rhythm Plus URL and try again");
+                            }
+                            else
+                            {
+                                mainWindow.loadURL(clipboardContent);
+                            }
+                        }
+                        catch (ex)
+                        {
+                            console.error("Unable to navigate to a URL due to an error! -", ex);
+                            showDialogMessage(mainWindow, "error", "Unable to nagivate", "We can't nagivate because and error occured! Please make sure you have a valid URL in your clipboard and try again. If you see this message again, please contact us for support");
+                        }
+                    }
                 }
             ]
         },
