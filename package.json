@@ -11,10 +11,6 @@
   "author": "Splamei",
   "license": "Apache-2.0",
   "description": "A client to play the Rhythm Plus music game in an app right on your device",
-  "devDependencies": {
-    "electron": "^43.1.1",
-    "electron-builder": "^26.15.3"
-  },
   "build": {
     "appId": "com.splamei.rplus-client.pc",
     "productName": "Rhythm Plus - Splamei Client",
@@ -33,6 +29,10 @@
   "dependencies": {
     "electron-log": "^5.4.4",
     "electron-window-state": "^5.0.3"
+  },
+  "devDependencies": {
+    "electron": "^43.1.1",
+    "electron-builder": "^26.15.3"
   },
   "overrides": {
     "@noble/hashes": "1.8.0"
