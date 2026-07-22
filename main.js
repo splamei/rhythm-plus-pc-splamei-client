@@ -56,6 +56,19 @@ log.transports.file.format = "[{y}-{m}-{d} {h}:{i}:{s}.{ms}] [{level}] {text}";
 
 console.log(`Saving logs too '${logFileLocation}'!`)
 
+// -- Exception manager --
+
+process.on("uncaughtException", (error) => {
+    console.error("Uncaught exception has occured! -", error);
+    dialog.showErrorBox("Something went wrong", "An unhandled rejection has occured. Because of this, the client cannot continue.\n\nPlease contact us for support or report an issue on GitHub!");
+    process.exit(2);
+});
+process.on("unhandledRejection", (reason) => {
+    console.error("Uncaught rejection has occured! -", reason);
+    dialog.showErrorBox("Something went wrong", "An unhandled rejection has occured. Because of this, the client cannot continue.\n\nPlease contact us for support or report an issue on GitHub!");
+    process.exit(2);
+});
+
 // -- Arg setup --
 
 app.commandLine.appendSwitch('ignore-gpu-blocklist');
