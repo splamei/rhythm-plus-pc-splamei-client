@@ -399,8 +399,18 @@ function displayAppMenu()
             submenu: [
                 {
                     label: "Reload",
-                    accelerator: "CmdOrCtrl+R",
-                    click: () => mainWindow.reload()
+                    submenu: [
+                        {
+                            label: "Soft Reload",
+                            accelerator: "CmdOrCtrl+R",
+                            click: () => mainWindow.reload()
+                        },
+                        {
+                            label: "Hard Reload",
+                            accelerator: "CmdOrCtrl+Shift+R",
+                            click: () => mainWindow.webContents.reloadIgnoringCache()
+                        }
+                    ]
                 },
                 { type: "separator" },
                 {
