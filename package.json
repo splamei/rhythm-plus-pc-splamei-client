@@ -4,8 +4,8 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "build:win": "electron-builder --win portable",
-    "build:linux": "electron-builder --linux AppImage"
+    "build:win": "electron-builder --win dir",
+    "build:linux": "electron-builder --linux dir"
   },
   "keywords": [],
   "author": "Splamei",
@@ -19,16 +19,13 @@
     "appId": "com.splamei.rplus-client.pc",
     "productName": "Rhythm Plus - Splamei Client",
     "win": {
-      "target": "portable",
+      "target": ["dir"],
       "icon": "build/icon.ico",
       "signExecutable": false,
-      "signAndEditExecutable": true,
-      "compression": "store"
+      "signAndEditExecutable": true
     },
     "linux": {
-      "target": [
-        "AppImage"
-      ],
+      "target": ["dir"],
       "icon": "assets/icon.png",
       "category": "Game"
     }
