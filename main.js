@@ -191,8 +191,17 @@ function createWindow()
     });
 
     mainWindow.once("ready-to-show", () => {
-        console.log("Loaded!")
+        console.log("Loaded now loading the real page!")
         mainWindow.show();
+
+        if (settings.v2Mode)
+        {
+            mainWindow.loadURL("https://v2.rhythm-plus.com");
+        }
+        else
+        {
+            mainWindow.loadURL("https://rhythm-plus.com");
+        }
 
         dialog.showMessageBox(mainWindow, {
             type: 'warning',
@@ -263,14 +272,7 @@ function createWindow()
 
     console.log("Created the browser window and got it managed by the window state!")
 
-    if (settings.v2Mode)
-    {
-        mainWindow.loadURL("https://v2.rhythm-plus.com");
-    }
-    else
-    {
-        mainWindow.loadURL("https://rhythm-plus.com");
-    }
+    mainWindow.loadFile(path.join(__dirname, "splashLoad.html"));
 
     console.log("Now loading!")
 
