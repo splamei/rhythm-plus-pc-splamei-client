@@ -233,6 +233,7 @@ function createWindow()
     });
 
     mainWindowState.manage(mainWindow);
+    navigationHistory = mainWindow.webContents.navigationHistory;
 
     mainWindow.on("page-title-updated", (event, title) => {
         event.preventDefault();
@@ -277,6 +278,10 @@ function createWindow()
         mainWindow.loadFile(path.join(__dirname, "splashLoad.html"));
         console.error("Failed to load a page! Code:", errorCode)
     });
+
+    mainWindow.webContents.on("did-finish-load", () => {
+        mainWindow.webContents.clearHistory();
+    })
 
     mainWindow.webContents.setWindowOpenHandler(({ url }) => {
         if (!url.includes("about:blank"))
@@ -339,8 +344,6 @@ function createWindow()
             console.log("Mode set to always so now showing the menu!")
         }
     });
-
-    navigationHistory = mainWindow.webContents.navigationHistory;
 
     console.log("Created the browser window and got it managed by the window state!")
 
