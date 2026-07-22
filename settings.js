@@ -24,11 +24,7 @@ saveBtn.addEventListener("click", async () => {
     };
 
     const success = await window.electronAPI.saveSettings(newSettings);
-    if (success)
-    {
-        alert("Your settings have been saved!");
-    }
-    else
+    if (!success)
     {
         alert("Something went wrong saving your settings!");
     }
