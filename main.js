@@ -444,6 +444,7 @@ function displayAppMenu()
             submenu: [
                 {
                     label: "Copy URL",
+                    accelerator: "CmdOrCtrl+Alt+C",
                     click: () => {
                         try
                         {
@@ -466,6 +467,7 @@ function displayAppMenu()
                 },
                 {
                     label: "To a URL",
+                    accelerator: "CmdOrCtrl+Alt+T",
                     click: () => {
                         try
                         {
