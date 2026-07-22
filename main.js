@@ -118,8 +118,12 @@ function showSettings(parentWindow)
         icon: path.join(__dirname, "assets/icon.png"),
         webPreferences: {
             preload: path.join(__dirname, "preload.js"),
+            backgroundThrottling: false,
+            contextIsolation: true,
             nodeIntegration: false,
-            contextIsolation: true
+            sandbox: true,
+            webSecurity: true,
+            allowRunningInsecureContent: false
         }
     });
 
@@ -168,7 +172,10 @@ function createWindow()
         webPreferences: {
             backgroundThrottling: false,
             contextIsolation: true,
-            nodeIntegration: false
+            nodeIntegration: false,
+            sandbox: true,
+            webSecurity: true,
+            allowRunningInsecureContent: false
         }
     });
 
@@ -228,8 +235,12 @@ function createWindow()
                 autoHideMenuBar: true,
                 fullscreenable: false,
                 webPreferences: {
+                    backgroundThrottling: false,
                     contextIsolation: true,
-                    nodeIntegration: false
+                    nodeIntegration: false,
+                    sandbox: true,
+                    webSecurity: true,
+                    allowRunningInsecureContent: false
                 }
             }
         };
@@ -384,12 +395,17 @@ function displayAppMenu()
                         height: 550,
                         title: ext.name,
                         autoHideMenuBar: true,
-                        fullscreenable: true,
+                        fullscreenable: false,
                         icon: path.join(__dirname, 'assets/icon.png'),
                         title: "Rhythm Plus - Splamei Client",
                         userAgent: clientUserAgent,
                         webPreferences: {
-                            contextIsolation: true
+                            backgroundThrottling: false,
+                            contextIsolation: true,
+                            nodeIntegration: false,
+                            sandbox: true,
+                            webSecurity: true,
+                            allowRunningInsecureContent: false
                         }
                     });
 
