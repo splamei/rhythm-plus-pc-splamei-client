@@ -564,7 +564,7 @@ function showAboutDialog(parentWindow) {
         type: 'info',
         title: "About - Rhythm Plus Splamei Client",
         message: "About the client",
-        detail: `A client to play the Rhythm Plus music game in an app right on your device\n\nVersion: ${app.getVersion()}\nNode: ${process.versions.node}\nElectron: ${process.versions.electron}\n\nMade with <3 by Splamei`,
+        detail: `A client to play the Rhythm Plus music game in an app right on your device\n\n----\n\nClient: ${app.getVersion()}\n\nNode: ${process.versions.node}\nElectron: ${process.versions.electron}\nChromium: ${process.versions.chrome}\nV8: ${process.versions.v8}\n\n----\n\nMade with <3 by Splamei`,
         buttons: ['OK']
     });
 }
