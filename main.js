@@ -344,41 +344,51 @@ function displayAppMenu()
 {
     console.log("Displaying the menu")
 
-    const extensionMenuItems = loadedExtensions.length > 0
-        ? loadedExtensions.map(ext => ({
-            label: ext.name,
+    const extensionMenuItems = [
+        {
+            label: "Open extension folder",
             click: () => {
-                if (!ext.popupPath)
-                {
-                    dialog.showMessageBox(mainWindow, {
-                        type: "warning",
-                        title: ext.name,
-                        message: "This extension doesn't have a page we can display set for it.\n\nIt may not have a page set or it's configured in a way that stopped us from finding it"
-                    });
-                    console.log(`Unable to show page for extension '${ext.name}'! (No popup path)`);
-                    return;
-                }
-
-                console.log(`Showing popup for extension '${ext.name}' via URL 'chrome-extension://${ext.id}/${ext.popupPath}'!`)
-
-                const popup = new BrowserWindow({
-                    width: 450,
-                    height: 550,
-                    title: ext.name,
-                    autoHideMenuBar: true,
-                    fullscreenable: true,
-                    icon: path.join(__dirname, 'assets/icon.png'),
-                    title: "Rhythm Plus - Splamei Client",
-                    userAgent: clientUserAgent,
-                    webPreferences: {
-                        contextIsolation: true
-                    }
-                });
-
-                popup.loadURL(`chrome-extension://${ext.id}/${ext.popupPath}`);
+                shell.openPath(extensionPathLocation);
+                console.log("Opening the extention path -", extensionPathLocation);
             }
-        }))
-    : [{ label: "No extensions are installed", enabled: false }];
+        },
+        { type: "separator" },
+        ...(loadedExtensions.length > 0
+            ? loadedExtensions.map(ext => ({
+                label: ext.name,
+                click: () => {
+                    if (!ext.popupPath)
+                    {
+                        dialog.showMessageBox(mainWindow, {
+                            type: "warning",
+                            title: ext.name,
+                            message: "This extension doesn't have a page we can display set for it.\n\nIt may not have a page set or it's configured in a way that stopped us from finding it"
+                        });
+                        console.log(`Unable to show page for extension '${ext.name}'! (No popup path)`);
+                        return;
+                    }
+
+                    console.log(`Showing popup for extension '${ext.name}' via URL 'chrome-extension://${ext.id}/${ext.popupPath}'!`)
+
+                    const popup = new BrowserWindow({
+                        width: 450,
+                        height: 550,
+                        title: ext.name,
+                        autoHideMenuBar: true,
+                        fullscreenable: true,
+                        icon: path.join(__dirname, 'assets/icon.png'),
+                        title: "Rhythm Plus - Splamei Client",
+                        userAgent: clientUserAgent,
+                        webPreferences: {
+                            contextIsolation: true
+                        }
+                    });
+
+                    popup.loadURL(`chrome-extension://${ext.id}/${ext.popupPath}`);
+                }
+            }))
+        : [{ label: "No extensions are installed", enabled: false }])
+    ]
 
     const menuTemplate = [
         {
