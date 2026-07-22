@@ -218,6 +218,13 @@ function createWindow()
         });
     });
 
+    mainWindow.webContents.on("did-fail-load", (event, errorCode, errorDescription) => {
+        if (errorCode === -3) { return; }
+
+        mainWindow.loadFile(path.join(__dirname, "splashLoad.html"));
+        console.error("Failed to load a page! Code:", errorCode)
+    });
+
     mainWindow.webContents.setWindowOpenHandler(({ url }) => {
         if (!url.includes("about:blank"))
         {
