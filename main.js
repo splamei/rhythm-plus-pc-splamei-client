@@ -398,11 +398,6 @@ function displayAppMenu()
             label: "File",
             submenu: [
                 {
-                    label: "Toggle Fullscreen",
-                    accelerator: "F11",
-                    click: () => mainWindow.setFullScreen(!mainWindow.isFullScreen())
-                    },
-                {
                     label: "Reload",
                     accelerator: "CmdOrCtrl+R",
                     click: () => mainWindow.reload()
@@ -420,6 +415,12 @@ function displayAppMenu()
         {
             label: "View",
             submenu: [
+                {
+                    label: "Toggle Fullscreen",
+                    accelerator: "F11",
+                    click: () => mainWindow.setFullScreen(!mainWindow.isFullScreen())
+                },
+                { type: "separator" },
                 { role: "zoomIn", accelerator: "CmdOrCtrl+Plus" },
                 { role: "zoomOut", accelerator: "CmdOrCtrl+-" },
                 { role: "resetZoom", accelerator: "CmdOrCtrl+0" },
