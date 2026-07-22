@@ -19,6 +19,28 @@ const path = require("path");
 const fs = require("fs");
 const log = require('electron-log/main');
 
+// -- Instance lock --
+
+const singleAppLock = app.requestSingleInstanceLock();
+if (!singleAppLock)
+{
+    app.quit();
+    return;
+}
+else
+{
+    app.on("second-instance", () => {
+        if (mainWindow)
+        {
+            if (mainWindow.isMinimized())
+            {
+                mainWindow.restore();
+            }
+            mainWindow.focus();
+        }
+    })
+}
+
 // -- Logging --
 
 const logFileLocation = path.join(app.getPath("userData"), "Logs", "App.log");
