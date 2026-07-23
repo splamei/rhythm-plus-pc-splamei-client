@@ -280,7 +280,7 @@ function createWindow()
     });
 
     mainWindow.webContents.on("did-finish-load", () => {
-        mainWindow.webContents.clearHistory();
+        mainWindow.webContents.navigationHistory.clearHistory();
     })
 
     mainWindow.webContents.setWindowOpenHandler(({ url }) => {
