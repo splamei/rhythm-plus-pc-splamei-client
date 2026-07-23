@@ -621,7 +621,7 @@ function displayAppMenu()
             submenu: [
                 {
                     label: "Star on GitHub",
-                    click: () => shell.openExternal("https://github.com/splamei/rhythm-plus-splamei-client-electron")
+                    click: () => shell.openExternal("https://github.com/splamei/rhythm-plus-splamei-client")
                 },
                 { type: "separator" },
                 {
