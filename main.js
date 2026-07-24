@@ -951,11 +951,21 @@ function displayAppMenu()
                         try
                         {
                             const clipboardContent = clipboard.readText();
+
                             if (clipboardContent == null || clipboardContent.length < 1)
                             {
                                 showDialogMessage(mainWindow, "error", "Unable to nagivate", "We can't nagivate because your clipboard is empty or it's latest content isn't text. Please copy the URL you want to nagivate and try again.");
                             }
-                            else if (!clipboardContent.includes("rhythm-plus.com/"))
+                            else if (!clipboardContent.startsWith("https://"))
+                            {
+                                showDialogMessage(mainWindow, "error", "Unable to nagivate", "We can't nagivate because that isn't a valid URL or it's not HTTPS. Please copy the URL you want to nagivate and try again.");
+                                return
+                            }
+
+                            const urlObj = new URL(clipboardContent);
+                            const hostname = urlObj.hostname;
+                            
+                            if (hostname !== "rhythm-plus.com" && hostname !== "v2.rhythm-plus.com")
                             {
                                 showDialogMessage(mainWindow, "error", "Unable to nagivate", "We can't nagivate because the latest entry in your clipboard isn't a Rhythm Plus URL! Please make sure you copy a valid Rhythm Plus URL and try again");
                             }
