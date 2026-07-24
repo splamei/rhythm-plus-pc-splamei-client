@@ -273,9 +273,9 @@ function createWindow()
     });
 
     mainWindow.webContents.on("did-fail-load", (event, errorCode, errorDescription) => {
-        if (errorCode === -3) { return; }
+        if (errorCode === -3 || errorCode === -27) { return; }
 
-        mainWindow.loadFile(path.join(__dirname, "splashLoad.html"));
+        mainWindow.loadFile(path.join(__dirname, "error.html"));
         console.error("Failed to load a page! Code:", errorCode)
     });
 
