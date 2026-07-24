@@ -512,6 +512,11 @@ function setRpc(details, state)
 
             smallImageKey: "icon",
             smallImageText: `Version: ${app.getVersion()} - By: Splamei`,
+
+            buttons: [
+                { label: "Play Rhythm Plus", url: "https://rhythm-plus.com" },
+                { label: "Download the client", url: "https://www.veemo.uk/r-plus-splamei-client/" }
+            ]
         }).then(() => {
             console.log(`Updated Discord RPC to details '${details}' and state '${state}'!`)
         }).catch(console.error);
