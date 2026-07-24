@@ -193,8 +193,313 @@ let startTime = Date.now();
 discord.on("ready", () => {
     console.log("Discord RPC is connected and ready for action!");
     isRpcReadyActive = true;
-    setRpc("", "")
+    setRpc("", "");
+
+    if (settings.discordRpcDetails)
+    {
+        startRpcDetailsLook();
+    }
 });
+
+function startRpcDetailsLook()
+{
+    setInterval(async () => {
+        if (!mainWindow || mainWindow.isDestroyed() || !currentUrl) { return; }
+
+        if (currentUrl.includes("/game/"))
+        {
+            await makeRpcDomRequest();
+        }
+    }, 3000);
+}
+
+async function makeRpcDomRequest()
+{
+    if (!mainWindow || mainWindow.isDestroyed() || !currentUrl) { return; }
+
+    if (!settings.discordRpcDetails) { return; }
+
+    try
+    {
+        const url = currentUrl;
+        const urlObj = new URL(url);
+        const hostname = urlObj.hostname;
+
+        let command = "";
+        if (hostname === "rhythm-plus.com")
+        {
+            command = `
+                (() => {
+                let selectedSongName = document.querySelector("div.detail.py-5 > div:nth-child(1)")?.innerText
+                let selectedSongAuthor = "";
+                let selectedSongCharter= "";
+                let selectedSongImage= "";
+
+                if (selectedSongName)
+                {
+                    selectedSongAuthor = document.querySelector("div.detail.py-5 > div:nth-child(2)")?.innerText;
+                    selectedSongCharter = document.querySelector("div.pt-2.text-xs.text-white.text-opacity-25 > span:nth-child(3) > span")?.innerText;
+                    if (!songCharter)
+                    {
+                        selectedSongCharter = document.querySelector("div.pt-2.text-xs.text-white.text-opacity-25 > span > span")?.innerText;
+                    }
+                    selectedSongImage = document.querySelector("div.detail > div > div > div.image > img").src || "";
+                }
+
+                let resultRankObj = document.querySelector(".score")?.innerText;
+                let resultAccuracyObj = "";
+                let resultScoreObj = "";
+                let resultMaxComboObj = "";
+                let resultFcObj = "";
+
+                if (resultRankObj)
+                {
+                    resultAccuracyObj = document.querySelector("div:nth-child(3) > span")?.innerText;
+                    resultScoreObj = document.querySelector("div.rightScore.flex-grow > div:nth-child(1) > span")?.innerText;
+                    resultMaxComboObj = document.querySelector("div.rightScore.flex-grow > div:nth-child(2) > span")?.innerText;
+                    resultFcObj = document.querySelector("div.rightScore.flex-grow > div:nth-child(2) > div")?.innerText;
+                }
+
+                let currentAccuracyObj = document.querySelector(".score span")?.innerText;
+                let currentScoreObj = "";
+                let progressElem = "";
+                let currentTimeObj = "0%";
+
+                if (currentAccuracyObj)
+                {
+                    currentScoreObj = document.querySelector(".score > span")?.innerText;
+                    progressElem = document.querySelector(".top-progress");
+
+                    if (progressElem)
+                    {
+                        currentTimeObj = progressElem.style.width || getComputedStyle(progressElem).width;
+                    }
+                }
+
+                let isAutoPlay = false;
+
+                return {
+                    title: document.title,
+                    url: window.location.href,
+
+                    selectedSongName: selectedSongName || "",
+                    selectedSongAuthor: selectedSongAuthor || "",
+                    selectedSongCharter: selectedSongCharter || "",
+                    selectedSongImage: selectedSongImage || "",
+
+                    resultRank: resultRankObj || "",
+                    resultAccuracy: resultAccuracyObj,
+                    resultScore: resultScoreObj || "",
+                    resultMaxCombo: resultMaxComboObj || "",
+                    resultFC: resultFcObj || "",
+
+                    currentAccuracy: currentAccuracyObj || "",
+                    currentScore: currentScoreObj || "",
+                    currentTime: currentTimeObj,
+
+                    isAutoPlay: isAutoPlay
+                };
+                })()
+            `;
+        }
+        else if (hostname === "v2.rhythm-plus.com")
+        {
+            command = `
+                (() => {
+                const selectedSongName = document.querySelector("div.flex-1 > div.mt-10 > div")?.innerText
+                let selectedSongAuthor = "";
+                let selectedSongCharter = "";
+                let selectedSongImage = "";
+
+                if (selectedSongName)
+                {
+                    selectedSongAuthor = document.querySelector("div.flex-1.self-end > div.mt-10 > div.opacity-60")?.innerText;
+                    selectedSongCharter = document.querySelector("a > div > div > div.text-sm.leading-5 > div > div")?.innerText;
+                    selectedSongImage = document.querySelector("div.absolute.w-full.top-0.flex.z-10.pointer-events-none.rounded-t-lg.overflow-hidden > img").src || "";
+                }
+
+                const resultRankObj = document.querySelector(".score")?.innerText;
+                let resultAccuracyObj = "";
+                let resultScoreObj = "";
+                let resultMaxComboObj = "";
+                let resultFcObj = "";
+
+                if (resultRankObj)
+                {
+                    resultAccuracyObj = document.querySelector("div.percentage-display > div")?.innerText;
+                    resultScoreObj = document.querySelector("div.score-title > div")?.innerText;
+                    resultMaxComboObj = document.querySelector("div.combo-container > div > div")?.innerText;
+                    resultFcObj = document.querySelector("div.combo-container > div.mark-chip.achievement-chip.combo-chip")?.innerText;
+                }
+
+                const currentAccuracyObj = document.querySelector("div.score > div:nth-child(3)")?.innerText;
+                let currentScoreObj = "";
+                let progressElem = "";
+                let currentTimeObj = "0%";
+
+                if (currentAccuracyObj)
+                {
+                    currentScoreObj = document.querySelector("div.score > div.text-5xl")?.innerText;
+                    progressElem = document.querySelector(".top-progress");
+
+                    if (progressElem)
+                    {
+                        currentTimeObj = progressElem.style.width || getComputedStyle(progressElem).width;
+                    }
+                }
+
+                const isAutoPlay = !!document.querySelector("div.score > div > span")?.innerText;
+
+                return {
+                    title: document.title,
+                    url: window.location.href,
+
+                    selectedSongName: selectedSongName || "",
+                    selectedSongAuthor: selectedSongAuthor || "",
+                    selectedSongCharter: selectedSongCharter || "",
+                    selectedSongImage: selectedSongImage || "",
+
+                    resultRank: resultRankObj || "",
+                    resultAccuracy: resultAccuracyObj,
+                    resultScore: resultScoreObj || "",
+                    resultMaxCombo: resultMaxComboObj || "",
+                    resultFC: resultFcObj || "",
+
+                    currentAccuracy: currentAccuracyObj || "",
+                    currentScore: currentScoreObj || "",
+                    currentTime: currentTimeObj,
+
+                    isAutoPlay: isAutoPlay
+                };
+                })()
+            `;
+        }
+
+        console.log("Making a DOM rwquest");
+
+        let domResult = await mainWindow.webContents.executeJavaScript(command);
+        if (!domResult)
+        {
+            console.warn("Unable to set RPC details as the DOM is empty!");
+        }
+        else
+        {
+            parseRpcDomResult(domResult);
+        }
+    }
+    catch (ex)
+    {
+        console.error("Failed to set RPC details! -", ex);
+    }
+}
+
+let selectedSongName = "";
+let selectedSongAuthor = "";
+let selectedSongCharter = "";
+function parseRpcDomResult(result)
+{
+    console.log("Now parsing the DOM request");
+
+    if (!result) { return; }
+
+    let details = "Playing Rhythm Plus";
+    const uri = currentUrl;
+
+    const selectedSongNameDom = result.selectedSongName;
+    const selectedSongAuthorDom = result.selectedSongAuthor;
+    const selectedSongCharterDom = result.selectedSongCharter;
+    const selectedSongTitle = result.selectedSongTitle;
+    const selectedSongImage = result.selectedSongImage;
+    const resultRank = result.resultRank;
+    const resultScore = result.resultScore;
+    const resultMaxCombo = result.resultMaxCombo;
+    const resultFC = result.resultFC;
+    const currentAccuracy = result.currentAccuracy;
+    const currentScore = result.currentScore;
+    let currentTime = result.currentTime;
+    const isAutoPlay = result.isAutoPlay;
+
+    if (selectedSongAuthorDom && selectedSongAuthorDom !== "")
+    {
+        selectedSongAuthor = selectedSongAuthorDom;
+        selectedSongCharter = selectedSongCharterDom;
+        selectedSongName = selectedSongNameDom;
+    }
+
+    if (uri === "https://rhythm-plus.com/" || uri === "https://v2.rhythm-plus.com/")
+    {
+        details = "On the intro screen";
+    }
+    else if (uri.includes("rhythm-plus.com/menu"))
+    {
+        details = "Looking at songs";
+    }
+    else if (uri.includes("rhythm-plus.com/studio") || uri.includes("rhythm-plus.com/editor"))
+    {
+        details = "Creating a chart";
+    }
+    else if (uri.includes("rhythm-plus.com/account"))
+    {
+        details = "Changing settings";
+    }
+    else if (uri.includes("rhythm-plus.com/tutorial"))
+    {
+        details = "Playing the tutorial";
+    }
+    else if (uri.includes("rhythm-plus.com/result"))
+    {
+        details = "Looking at some results";
+    }
+    else if (uri.includes("rhythm-plus.com/game-over"))
+    {
+        details = "Failed a chart";
+    }
+    else if (uri.includes("rhythm-plus.com/game"))
+    {
+        let songName = currentTitle.split(" - Rhythm+ Music")[0].split(" - Rhythm Plus Music")[0];
+        if (songName === "Game")
+        {
+            details = "Loading a song";
+        }
+        else
+        {
+            details = `Playing '${selectedSongName} -by- ${selectedSongAuthor} [${selectedSongCharter}]'`;
+        }
+    }
+
+    let state = "";
+    let rank = "";
+    if (uri.includes("rhythm-plus.com/game"))
+    {
+        currentTime = currentTime.split(".")[0];
+        console.log(`Current Score: ${currentScore} | Current Acc: ${currentAccuracy}% | Current Time: ${currentTime}%`)
+
+        if (currentScore && currentScore !== "" && !isAutoPlay)
+        {
+            state = ` - Score: ${currentScore} - Acc: ${currentAccuracy}% - Point: ${currentTime}%`;
+        }
+        else if (isAutoPlay)
+        {
+            state = ` - [AUTOPLAY] - Score: ${currentScore}`;
+        }
+    }
+    else if (uri.includes("rhythm-plus.com/result"))
+    {
+        if (resultScore != "" && resultScore)
+        {
+            if (resultFC === "Full Combo")
+            {
+                state = ` - [FC] - Score: ${resultScore} - Acc: ${resultAccuracy}% - Rank: ${resultRank} - Max Combo: ${resultMaxCombo}`;
+            }
+            else
+            {
+                state = ` - Score: ${resultScore} - Acc: ${resultAccuracy}% - Rank: ${resultRank} - Max Combo: ${resultMaxCombo}`;
+            }
+        }
+    }
+
+    setRpc(details, state);
+}
 
 function setRpc(details, state)
 {
@@ -223,6 +528,7 @@ app.setPath("sessionData", cachePathLocation);
 let mainWindow;
 let navigationHistory;
 const loadedExtensions = [];
+let currentTitle = "";
 
 app.on("browser-window-created", (event, createWindow) => {
     if (createWindow !== mainWindow)
@@ -276,6 +582,7 @@ function createWindow()
         event.preventDefault();
 
         var newTitle = ""
+        currentTitle = title;
         if (title.startsWith("Rhythm Plus - Online Rhythm Game"))
         {
             newTitle = "Rhythm Plus - Splamei Client"
@@ -380,6 +687,8 @@ function createWindow()
             displayAppMenu();
             console.log("Mode set to always so now showing the menu!")
         }
+
+        setTimeout(makeRpcDomRequest, 1111);
     });
 
     console.log("Created the browser window and got it managed by the window state!")
