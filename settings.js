@@ -18,6 +18,9 @@
 const v2ModeCheck = document.getElementById("v2-mode");
 const showMenuWhen = document.getElementById("show-menu");
 
+const discordRpcEnableCheck = document.getElementById("discord-rpc-enable");
+const discordRpcDetailsCheck = document.getElementById("discord-rpc-details");
+
 const saveBtn = document.getElementById('save-btn');
 
 // -- Functions --
@@ -28,6 +31,9 @@ async function initSettings()
 
     v2ModeCheck.checked = settings.v2Mode;
     showMenuWhen.value = settings.showMenu;
+
+    discordRpcEnableCheck.checked = settings.discordRpc;
+    discordRpcDetailsCheck.checked = settings.discordRpcDetails;
 }
 
 // -- Event listeners --
@@ -35,7 +41,10 @@ async function initSettings()
 saveBtn.addEventListener("click", async () => {
     const newSettings = {
         v2Mode: v2ModeCheck.checked,
-        showMenu: showMenuWhen.value
+        showMenu: showMenuWhen.value,
+
+        discordRpc: discordRpcEnableCheck.checked,
+        discordRpcDetails: discordRpcDetailsCheck.checked
     };
 
     const success = await window.electronAPI.saveSettings(newSettings);

@@ -97,7 +97,9 @@ let currentUrl = "";
 
 const defaultSettings = {
     v2Mode: false,
-    showMenu: "alwaysExceptGame"
+    showMenu: "alwaysExceptGame",
+    discordRpc: true,
+    discordRpcDetails: true
 };
 
 let settingsWindow = null;
@@ -189,7 +191,7 @@ let isRpcReadyActive = false;
 let startTime = Date.now();
 
 discord.on("ready", () => {
-    console.log("Discord RPC is connection and ready for action!");
+    console.log("Discord RPC is connected and ready for action!");
     isRpcReadyActive = true;
     setRpc("", "")
 });
@@ -208,7 +210,10 @@ function setRpc(details, state)
     }
 }
 
-discord.login().catch(console.error);
+if (settings.discordRpc)
+{
+    discord.login().catch(console.error);
+}
 
 // -- Browser setup --
 
