@@ -419,6 +419,9 @@ function parseRpcDomResult(result)
     let currentTime = result.currentTime;
     const isAutoPlay = result.isAutoPlay;
 
+    let state = "";
+    let rank = "";
+
     if (selectedSongAuthorDom && selectedSongAuthorDom !== "")
     {
         selectedSongAuthor = selectedSongAuthorDom;
@@ -449,6 +452,18 @@ function parseRpcDomResult(result)
     else if (uri.includes("rhythm-plus.com/result"))
     {
         details = "Looking at some results";
+
+        if (resultScore != "" && resultScore)
+        {
+            if (resultFC === "Full Combo")
+            {
+                state = ` - [FC] - Score: ${resultScore} - Acc: ${resultAccuracy}% - Rank: ${resultRank} - Max Combo: ${resultMaxCombo}`;
+            }
+            else
+            {
+                state = ` - Score: ${resultScore} - Acc: ${resultAccuracy}% - Rank: ${resultRank} - Max Combo: ${resultMaxCombo}`;
+            }
+        }
     }
     else if (uri.includes("rhythm-plus.com/game-over"))
     {
@@ -465,12 +480,7 @@ function parseRpcDomResult(result)
         {
             details = `Playing '${selectedSongName} -by- ${selectedSongAuthor} [${selectedSongCharter}]'`;
         }
-    }
 
-    let state = "";
-    let rank = "";
-    if (uri.includes("rhythm-plus.com/game"))
-    {
         currentTime = currentTime.split(".")[0];
         console.log(`Current Score: ${currentScore} | Current Acc: ${currentAccuracy}% | Current Time: ${currentTime}%`)
 
@@ -481,20 +491,6 @@ function parseRpcDomResult(result)
         else if (isAutoPlay)
         {
             state = ` - [AUTOPLAY] - Score: ${currentScore}`;
-        }
-    }
-    else if (uri.includes("rhythm-plus.com/result"))
-    {
-        if (resultScore != "" && resultScore)
-        {
-            if (resultFC === "Full Combo")
-            {
-                state = ` - [FC] - Score: ${resultScore} - Acc: ${resultAccuracy}% - Rank: ${resultRank} - Max Combo: ${resultMaxCombo}`;
-            }
-            else
-            {
-                state = ` - Score: ${resultScore} - Acc: ${resultAccuracy}% - Rank: ${resultRank} - Max Combo: ${resultMaxCombo}`;
-            }
         }
     }
 
