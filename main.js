@@ -414,6 +414,7 @@ function parseRpcDomResult(result)
     const resultScore = result.resultScore;
     const resultMaxCombo = result.resultMaxCombo;
     const resultFC = result.resultFC;
+    const resultAccuracy = result.resultAccuracy;
     const currentAccuracy = result.currentAccuracy;
     const currentScore = result.currentScore;
     let currentTime = result.currentTime;
