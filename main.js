@@ -506,6 +506,12 @@ function setRpc(details, state)
             details: details,
             state: state,
             startTimestamp: startTime,
+
+            largeImageKey: "logo",
+            largeImageText: "Rhythm Plus - Splamei Client",
+
+            smallImageKey: "icon",
+            smallImageText: `Version: ${app.getVersion()} - By: Splamei`,
         }).then(() => {
             console.log(`Updated Discord RPC to details '${details}' and state '${state}'!`)
         }).catch(console.error);
