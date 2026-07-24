@@ -19,6 +19,7 @@ const path = require("path");
 const fs = require("fs");
 const log = require('electron-log/main');
 const { permission } = require("process");
+const { Client } = require('@xhayper/discord-rpc');
 
 // -- Instance lock --
 
@@ -177,6 +178,37 @@ ipcMain.handle("get-settings", () => loadSettings());
 ipcMain.handle("save-settings", (event, newSettings) => saveSettings(newSettings));
 
 let settings = loadSettings();
+
+// -- Discord RPC setup --
+
+const discord = new Client({
+  clientId: "1331684607199936552"
+});
+
+let isRpcReadyActive = false;
+let startTime = Date.now();
+
+discord.on("ready", () => {
+    console.log("Discord RPC is connection and ready for action!");
+    isRpcReadyActive = true;
+    setRpc("", "")
+});
+
+function setRpc(details, state)
+{
+    if (isRpcReadyActive)
+    {
+        discord.user?.setActivity({
+            details: details,
+            state: state,
+            startTimestamp: startTime,
+        }).then(() => {
+            console.log(`Updated Discord RPC to details '${details}' and state '${state}'!`)
+        }).catch(console.error);
+    }
+}
+
+discord.login().catch(console.error);
 
 // -- Browser setup --
 
