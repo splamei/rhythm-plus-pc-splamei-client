@@ -1,0 +1,38 @@
+name: DCO Commit Check
+
+on:
+  pull_request:
+    branches: [ main ]
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+
+jobs:
+  check-dco:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Verify commits
+        run: |
+          echo "Getting commits"
+
+          COMMITS=$(git rev-list --no-merges origin/${{ github.base_ref }}..HEAD)
+          
+          echo "Checking commits"
+          
+          for commit in $COMMITS; do
+            echo "Checking commit $commit"
+            if !git log -1 --format=%B "$commit" | grep -q "Signed-off-by:"; then
+              echo "The commit $commit is not signed off! (Missing 'Signed-off-by:')"
+              echo
+              echo "Read 'CONTRIBUTING.md' on how to sign off your commits"
+              exit 1
+            fi
+          done
+          
+          echo "All commits have been signed off"
