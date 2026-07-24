@@ -332,14 +332,14 @@ async function makeRpcDomRequest()
                     resultFcObj = document.querySelector("div.combo-container > div.mark-chip.achievement-chip.combo-chip")?.innerText;
                 }
 
-                const currentAccuracyObj = document.querySelector("div.score > div:nth-child(3)")?.innerText;
+                const currentAccuracyObj = document.querySelector(".score-values > div:nth-child(1)")?.innerText;
                 let currentScoreObj = "";
                 let progressElem = "";
                 let currentTimeObj = "0%";
 
                 if (currentAccuracyObj)
                 {
-                    currentScoreObj = document.querySelector("div.score > div.text-5xl")?.innerText;
+                    currentScoreObj = document.querySelector(".score-values > div.text-5xl")?.innerText;
                     progressElem = document.querySelector(".top-progress");
 
                     if (progressElem)
@@ -487,7 +487,7 @@ function parseRpcDomResult(result)
 
         if (currentScore && currentScore !== "" && !isAutoPlay)
         {
-            state = ` - Score: ${currentScore} - Acc: ${currentAccuracy}% - Point: ${currentTime}%`;
+            state = ` - Score: ${currentScore} - Acc: ${currentAccuracy} - Point: ${currentTime}%`;
         }
         else if (isAutoPlay)
         {
