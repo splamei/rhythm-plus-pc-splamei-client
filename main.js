@@ -685,7 +685,14 @@ function createWindow()
             console.log("Mode set to always so now showing the menu!")
         }
 
-        setTimeout(makeRpcDomRequest, 1111);
+        if (currentUrl.includes("rhythm-plus.com/result"))
+        {
+            setTimeout(makeRpcDomRequest, 1111);
+        }
+        else
+        {
+            setTimeout(makeRpcDomRequest, 2222);
+        }
     });
 
     console.log("Created the browser window and got it managed by the window state!")
