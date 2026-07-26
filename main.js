@@ -432,7 +432,7 @@ function parseRpcDomResult(result)
 
     if (uri === "https://rhythm-plus.com/" || uri === "https://v2.rhythm-plus.com/")
     {
-        details = "On the intro screen";
+        details = "Looking at the menu";
     }
     else if (uri.includes("rhythm-plus.com/menu"))
     {
@@ -452,7 +452,7 @@ function parseRpcDomResult(result)
     }
     else if (uri.includes("rhythm-plus.com/result"))
     {
-        details = "Looking at some results";
+        details = "Finished a chart";
 
         if (resultScore != "" && resultScore)
         {
