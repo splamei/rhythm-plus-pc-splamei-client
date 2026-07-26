@@ -698,11 +698,11 @@ function createWindow()
 
         if (currentUrl.includes("rhythm-plus.com/result"))
         {
-            setTimeout(makeRpcDomRequest, 1111);
+            setTimeout(makeRpcDomRequest, 1200);
         }
         else
         {
-            setTimeout(makeRpcDomRequest, 2222);
+            setTimeout(makeRpcDomRequest, 700);
         }
     });
 
