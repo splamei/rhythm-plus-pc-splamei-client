@@ -146,7 +146,7 @@ function showSettings(parentWindow)
     }
 
     settingsWindow = new BrowserWindow({
-        width: 500,
+        width: 400,
         height: 600,
         title: 'Settings',
         parent: parentWindow,
