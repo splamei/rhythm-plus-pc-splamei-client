@@ -94,7 +94,7 @@ let wasGamePage = false;
 let currentUrl = "";
 
 const flowVer = "1.2";
-const myVerCode = "1000";
+const myVerCode = "1010";
 
 // -- Settings stuff --
 
