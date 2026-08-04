@@ -88,13 +88,13 @@ const cachePathLocation = path.join(userDataPath, "Browser", "Cache");
 const extensionPathLocation = path.join(userDataPath, "Extensions");
 const settingsPathLocation = path.join(userDataPath, 'settings.json');
 
-const clientUserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) RhythmPlus-SplameiClient/1000 (KHTML, like Gecko) Chrome/150.0.0.0";
-
 let wasGamePage = false;
 let currentUrl = "";
 
 const flowVer = "1.2";
 const myVerCode = "1010";
+
+const clientUserAgent = `Mozilla/5.0 (Windows NT 10.0; Win64; x64) RhythmPlus-SplameiClient/${myVerCode} (KHTML, like Gecko) Chrome/150.0.0.0`;
 
 // -- Settings stuff --
 
