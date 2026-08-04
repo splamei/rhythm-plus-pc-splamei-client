@@ -13,7 +13,7 @@
  *  limitations under the License.
  */
 
-const { app, BrowserWindow, Menu, session, dialog, shell, ipcMain, clipboard } = require("electron");
+const { app, BrowserWindow, Menu, session, dialog, shell, ipcMain, clipboard, net } = require("electron");
 const windowStateKeeper = require("electron-window-state");
 const path = require("path");
 const fs = require("fs");
@@ -92,6 +92,9 @@ const clientUserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) RhythmPlus-Sp
 
 let wasGamePage = false;
 let currentUrl = "";
+
+const flowVer = "1.2";
+const myVerCode = "1000";
 
 // -- Settings stuff --
 
@@ -550,6 +553,74 @@ app.whenReady().then(() => {
         callback(false);
     });
 });
+
+// -- Web request + updater
+
+async function fetchUrl(url)
+{
+    try
+    {
+        const response = await net.fetch(url);
+
+        if (!response.ok)
+        {
+            console.error(`Failed to make a web request to '${url}'! Status - ${response.status}`);
+            return null;
+        }
+
+        const data = await response.text();
+        return data;
+    }
+    catch (error)
+    {
+        console.error(`Failed to make a web request to '${url}'! Error - ${error}`);
+    }
+}
+
+function getPlatformName()
+{
+    if (process.platform === "win32")
+    {
+        return "windows";
+    }
+    else if (process.platform === "linux")
+    {
+        return "linux";
+    }
+    else
+    {
+        return "unknown";
+    }
+}
+
+async function checkForUpdates()
+{
+    try
+    {
+        const currentPlatform = getPlatformName();
+
+        const versionCode = await fetchUrl(`https://www.veemo.uk/flow/${flowVer}/r-plus/pc/releases/${getPlatformName()}/version`);
+        if (versionCode != myVerCode)
+        {
+            console.log(`New update! ${versionCode} over ${myVerCode}`)
+            dialog.showMessageBox(mainWindow, {
+                type: 'info',
+                title: "Rhythm Plus Splamei Client",
+                message: "There's a new update",
+                detail: "There's a new update to the client. To get the latest features, bug fixes and changes, it's best that you update.\n\nIf SplameiPlay is installed on your device, it will automatically update the client for you. Otherwise you'll need to download the latest update yourself.",
+                buttons: ['OK']
+            });
+        }
+        else
+        {
+            console.log("No need to update as the latest version is my version. - ", versionCode);
+        }
+    }
+    catch (error)
+    {
+        console.error(`Failed to check for updates due to an exception! Error - ${error}`);
+    }
+}
 
 // -- Window setup --
 
@@ -1039,6 +1110,8 @@ app.whenReady().then(async () => {
     console.log("Ready! Now loading extensions and creating the window")
     await loadExtensions();
     createWindow();
+
+    await checkForUpdates();
 });
 
 app.on("window-all-closed", () => {
