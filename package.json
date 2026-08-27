@@ -53,7 +53,7 @@
     "electron-window-state": "^5.0.3"
   },
   "devDependencies": {
-    "electron": "^43.4.0",
+    "electron": "^43.4.1",
     "electron-builder": "^26.15.3"
   },
   "overrides": {
