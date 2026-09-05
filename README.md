@@ -28,7 +28,12 @@ Rhythm Plus is a web-based vertical scrolling rhythm game (VSRG), you can make, 
 
 ## Compatibility
 
-> We're working on getting the minimum requirements for the client. Please while while we work on this!
+> This is the recommened min specs for your system. This doesn't mean devices that don't hit these requirements won't be able to run the client
+
+- Intel Core i5 10th Gen or AMD Ryzen 5 3600
+- GeForce RTX 4060, Radeon RX 6600 or Intel HD Graphics
+- 2GB RAM or more
+- Windows 10 or Debian 12
 
 ## Installation
 
