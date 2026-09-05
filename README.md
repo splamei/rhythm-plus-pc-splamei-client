@@ -36,7 +36,11 @@ Rhythm Plus is a web-based vertical scrolling rhythm game (VSRG), you can make, 
 
 ## Installation
 
-> The client is currently on in it's pre-release stage so please wait while we work on this section
+1) Visit the Releases page for this repo
+2) Download the correct zip (Windows or Linux)
+3) Extract the downloaded zip
+4) Run the executable (rplus-splamei-client-pc)
+    - On Linux, you'll need to give executing permissions to the main executable for it to run
 
 ## Custom Extensions
 
