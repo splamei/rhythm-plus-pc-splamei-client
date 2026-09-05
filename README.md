@@ -17,14 +17,13 @@ Rhythm Plus is a web-based vertical scrolling rhythm game (VSRG), you can make, 
 
 ## Features
 
- - On device app
-	 - You will need an active internet connection to the R+ servers to use the client
-	 - This client relies on Electron, which uses web technologies such as Chromium
- - Easy to use
- - Clean and simple UI
- - Extension support
- - Discord Rich Presence (TODO)
-	 - Currently working on implementing this!
+- On device app
+  - You will need an active internet connection to the R+ servers to use the client
+  - This client relies on Electron, which uses web technologies such as chromium
+- Easy to use
+- Clean and simple UI
+- Extension support
+- Discord Rich Presence
 
 ## Compatibility
 
