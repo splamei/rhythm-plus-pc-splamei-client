@@ -235,14 +235,14 @@ async function makeRpcDomRequest()
                 (() => {
                 let selectedSongName = document.querySelector("div.detail.py-5 > div:nth-child(1)")?.innerText
                 let selectedSongAuthor = "";
-                let selectedSongCharter= "";
+                let selectedSongCharter = "";
                 let selectedSongImage= "";
 
                 if (selectedSongName)
                 {
                     selectedSongAuthor = document.querySelector("div.detail.py-5 > div:nth-child(2)")?.innerText;
                     selectedSongCharter = document.querySelector("div.pt-2.text-xs.text-white.text-opacity-25 > span:nth-child(3) > span")?.innerText;
-                    if (!songCharter)
+                    if (!selectedSongCharter)
                     {
                         selectedSongCharter = document.querySelector("div.pt-2.text-xs.text-white.text-opacity-25 > span > span")?.innerText;
                     }
