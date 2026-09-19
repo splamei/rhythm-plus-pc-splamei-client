@@ -94,7 +94,7 @@ let currentUrl = "";
 const flowVer = "1.2";
 const myVerCode = "1010";
 
-const clientUserAgent = `Mozilla/5.0 (Windows NT 10.0; Win64; x64) RhythmPlus-SplameiClient/${myVerCode} (KHTML, like Gecko) Chrome/150.0.0.0`;
+const clientUserAgent = `Mozilla/5.0 (Windows NT 10.0; Win64; x64) RhythmPlus-SplameiClient/${myVerCode} (KHTML, like Gecko) Chrome/${process.versions.chrome}`;
 
 // -- Settings stuff --
 
