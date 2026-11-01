@@ -47,13 +47,20 @@ saveBtn.addEventListener("click", async () => {
         discordRpcDetails: discordRpcDetailsCheck.checked
     };
 
-    const success = await window.electronAPI.saveSettings(newSettings);
-    if (!success)
+    try
     {
-        alert("Something went wrong saving your settings!");
-    }
+        const success = await window.electronAPI.saveSettings(newSettings);
+        if (!success)
+        {
+            alert("Something went wrong saving your settings!");
+        }
 
-    window.close();
+        window.close();
+    }
+    catch (ex)
+    {
+        alert("Something went wrong saving your settings!\n\n" + ex);
+    }
 })
 
 initSettings();
