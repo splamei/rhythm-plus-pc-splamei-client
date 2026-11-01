@@ -828,7 +828,7 @@ SOFTWARE.
 
 The following npm package may be included in this product:
 
- - undici@6.28.1
+ - undici@6.29.1
 
 This package contains the following license:
 
