@@ -130,7 +130,8 @@ function saveSettings(settings)
 {
     try
     {
-        fs.writeFileSync(settingsPathLocation, JSON.stringify(settings, null, 4), "utf8");
+        const jsonData = JSON.stringify(settings, null, 4);
+        fs.writeFileSync(settingsPathLocation, jsonData, "utf8");
         return true;
     }
     catch (ex)
