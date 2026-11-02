@@ -1012,20 +1012,20 @@ function displayAppMenu()
                 {
                     label: "To a URL",
                     accelerator: "CmdOrCtrl+Alt+T",
-                    click: () => {
+                    click: async () => {
                         try
                         {
-                            const clipboardContent = clipboard.readText();
+                            const clipboardContent = await clipboard.readText();
 
                             if (clipboardContent == null || clipboardContent.length < 1)
                             {
                                 showDialogMessage(mainWindow, "error", "Unable to nagivate", "We can't nagivate because your clipboard is empty or it's latest content isn't text. Please copy the URL you want to nagivate and try again.");
                             }
-                            else if (!clipboardContent.startsWith("https://"))
+                            /**else if (!clipboardContent.startsWith("https://"))
                             {
                                 showDialogMessage(mainWindow, "error", "Unable to nagivate", "We can't nagivate because that isn't a valid URL or it's not HTTPS. Please copy the URL you want to nagivate and try again.");
                                 return
-                            }
+                            }**/
 
                             const urlObj = new URL(clipboardContent);
                             const hostname = urlObj.hostname;
