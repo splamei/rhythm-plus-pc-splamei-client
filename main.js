@@ -91,8 +91,8 @@ const settingsPathLocation = path.join(userDataPath, 'settings.json');
 let wasGamePage = false;
 let currentUrl = "";
 
-const flowVer = "1.2";
-const myVerCode = "1011";
+const flowVer = "1.3";
+const myVerCode = "1012";
 
 const clientUserAgent = `Mozilla/5.0 (Windows NT 10.0; Win64; x64) RhythmPlus-SplameiClient/${myVerCode} (KHTML, like Gecko) Chrome/${process.versions.chrome}`;
 
