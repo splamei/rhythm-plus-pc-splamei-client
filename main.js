@@ -600,7 +600,7 @@ async function checkForUpdates()
     {
         const currentPlatform = getPlatformName();
 
-        const versionCode = await fetchUrl(`https://www.veemo.uk/flow/${flowVer}/r-plus/pc/releases/${getPlatformName()}/version`);
+        const versionCode = await fetchUrl(`https://www.veemo.uk/flow/${flowVer}/r-plus/pc/releases/${getPlatformName()}/x64/version`);
         if (versionCode != myVerCode)
         {
             console.log(`New update! ${versionCode} over ${myVerCode}`)
