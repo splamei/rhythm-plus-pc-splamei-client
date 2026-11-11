@@ -1,0 +1,28 @@
+header:
+  license:
+    spdx-id: Apache-2.0
+    copyright-owner: Splamei
+    copyright-year: '2026'
+    software-name: rplus-splamei-client-pc
+
+  paths:
+    - '**'
+
+  paths-ignore:
+    - 'dist'
+    - 'THIRD_PARTY_LICENCES'
+    - '**/*.md'
+    - 'LICENCE'
+    - 'NOTICE'
+    - '**/*.png'
+    - '**/*.ico'
+    - '**/*.json'
+    - "assets"
+    - ".github"
+    - ".forgejo"
+    - ".gitignore"
+    - ".licenserc.yaml"
+
+dependency:
+  files:
+    - package.json
