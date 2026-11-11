@@ -2,9 +2,20 @@ name: Build Test
 
 on:
   push:
-    branches: [ main ]
+    branches: 
+      - main
+    paths:
+      - "**.html"
+      - "**.js"
+      - "**.json"
   pull_request:
-    branches: [ main ]
+    branches: 
+      - main
+    paths:
+      - "**.html"
+      - "**.js"
+      - "**.json"
+  workflow_dispatch:
 
 permissions:
   contents: read

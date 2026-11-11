@@ -2,12 +2,20 @@ name: Build Test (Forgejo)
 
 on:
   push:
-    branches: [ main ]
+    branches: 
+      - main
+    paths:
+      - "**.html"
+      - "**.js"
+      - "**.json"
   pull_request:
-    branches: [ main ]
-
-permissions:
-  contents: read
+    branches: 
+      - main
+    paths:
+      - "**.html"
+      - "**.js"
+      - "**.json"
+  workflow_dispatch:
 
 jobs:
   build-linux:
