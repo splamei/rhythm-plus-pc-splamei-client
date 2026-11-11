@@ -1,1 +1,10 @@
-Hello World!
+The folder is for storing all your extensions. Just stop the unpacked extension's folder here and restart the client.
+
+# -- IMPORTANT! --
+
+Like when running executables, extensions have full access to the Rhythm Plus game and may have further access to the system. Because of this, you need to be careful with the extensions you add because it may compromise your Rhythm Plus account, other accounts, or your system. Only use extensions from those you trust, make sure you have an active anti-virus active, your system is up-to-date and follow the latest security practices.
+
+# ----------------
+
+Learn more about handling extensions here:
+https://github.com/splamei/rhythm-plus-pc-splamei-client/blob/main/Wiki/Extensions.md
