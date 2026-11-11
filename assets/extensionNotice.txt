@@ -1,4 +1,4 @@
-The folder is for storing all your extensions. Just stop the unpacked extension's folder here and restart the client.
+The folder is for storing all your extensions. Just drop the unpacked extension's folder here and restart the client.
 
 # -- IMPORTANT! --
 
