@@ -1100,12 +1100,28 @@ function showDialogMessage(parentWindow, type, message, detail)
 
 // -- Other stuff --
 
+async function writeExtensionNotice()
+{
+    try
+    {
+        const extensionNoticePath = path.join(__dirname, 'assets/extensionNotice.txt');
+        const extensionNoticeContent = fs.readFileSync(extensionNoticePath);
+        await fs.writeFile(path.join(extensionPathLocation, "README.txt").toString(), extensionNoticeContent, "utf-8", (err) => err && console.error("Failed to write extension notice!" + err));
+    }
+    catch (ex)
+    {
+        console.error("Failed to write the extension notice! - " + ex);
+    }
+}
+
 app.whenReady().then(async () => {
     console.log("Ready! Now loading extensions and creating the window")
     await loadExtensions();
     createWindow();
 
     await checkForUpdates();
+
+    await writeExtensionNotice();
 });
 
 app.on("window-all-closed", () => {
