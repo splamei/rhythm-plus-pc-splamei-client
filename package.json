@@ -5,7 +5,8 @@
   "scripts": {
     "start": "electron .",
     "build:win": "electron-builder --win dir",
-    "build:linux": "electron-builder --linux dir"
+    "build:linux": "electron-builder --linux dir",
+    "build:mac": "electron-builder --mac dir"
   },
   "keywords": [],
   "author": "Splamei",
@@ -37,6 +38,16 @@
       ]
     },
     "linux": {
+      "target": [
+        "dir"
+      ],
+      "icon": "assets/icon.png",
+      "category": "Game",
+      "electronLanguages": [
+        "en-US"
+      ]
+    },
+    "mac": {
       "target": [
         "dir"
       ],
