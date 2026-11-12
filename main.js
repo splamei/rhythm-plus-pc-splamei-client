@@ -701,7 +701,10 @@ function createWindow()
     })
 
     mainWindow.webContents.setWindowOpenHandler(({ url }) => {
-        if (!url.includes("about:blank") && !url.startsWith("https://auth.rhythm-plus.com"))
+        const urlObj = new URL(url);
+        const hostname = urlObj.hostname;
+
+        if (url !== "about:blank" && hostname !== "auth.rhythm-plus.com")
         {
             shell.openExternal(url)
             return { action: "deny" };
