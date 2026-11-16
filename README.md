@@ -102,4 +102,4 @@ Any and all forks and derived works must use a different name and cannot imply e
 
 [YouTube](https://youtube.com/@splamei) - [Twitch](https://twitch.tv/splamei) - [Twitter](https://twitter.com/splamei) - [BlueSky](http://splamei.bsky.social/) - [Discord](https://discord.gg/g2KTP5X9At)
 
-## Built with ❤️ using Visual Studio Code and Electron
+## Built with ❤️ by Splamei and community
