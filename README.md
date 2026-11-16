@@ -5,11 +5,7 @@
 ![Commits since release](https://img.shields.io/github/commits-since/splamei/rhythm-plus-pc-splamei-client/latest)
 ![Repo Size](https://img.shields.io/github/repo-size/splamei/rhythm-plus-pc-splamei-client)
 
-# Rhythm Plus - Splamei Client (PC - Electron)
-
-## If your looking for the Android Client, you can find it [here](https://github.com/splamei/rplus-mobile-client)
-
-## If your looking for the .NET PC Client, you can find it [here](https://github.com/splamei/rplus-pc-client)
+# Rhythm Plus - Splamei Client
 
 A client for PC allowing you to play the [Rhythm Plus music game](https://rhythm-plus.com) within an app right on your device with extra nice features.
 
