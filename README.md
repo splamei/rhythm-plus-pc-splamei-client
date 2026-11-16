@@ -5,6 +5,19 @@
 ![Commits since release](https://img.shields.io/github/commits-since/splamei/rhythm-plus-pc-splamei-client/latest)
 ![Repo Size](https://img.shields.io/github/repo-size/splamei/rhythm-plus-pc-splamei-client)
 
+<details>
+
+<summary>Not reading on GitHub?</summary>
+
+Changes, issues and pull requests are only read and accepted when made on GitHub. Other locations, such as Codeberg are mirrors and are not checked.
+
+This is done to unify and make it easier to manage changes and issues that may pop up. If you need to make an issue or you want to help contribute to the creation of the client, please make them on the GitHub repository:
+
+https://github.com/splamei/rhythm-plus-pc-splamei-client
+
+</details>
+<br>
+
 # Rhythm Plus - Splamei Client
 
 A client for PC allowing you to play the [Rhythm Plus music game](https://rhythm-plus.com) within an app right on your device with extra nice features.
