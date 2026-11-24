@@ -606,7 +606,7 @@ async function checkForUpdates()
             console.log(`New update! ${versionCode} over ${myVerCode}`)
             dialog.showMessageBox(mainWindow, {
                 type: 'info',
-                title: "Rhythm Plus Splamei Client",
+                title: "Rhythm Plus - Splamei Client",
                 message: "There's a new update",
                 detail: "There's a new update to the client. To get the latest features, bug fixes and changes, it's best that you update.\n\nIf SplameiPlay is installed on your device, it will automatically update the client for you. Otherwise you'll need to download the latest update yourself.",
                 buttons: ['OK']
@@ -640,7 +640,7 @@ function createWindow()
         width: mainWindowState.width,
         height: mainWindowState.height,
         icon: path.join(__dirname, 'assets/icon.png'),
-        title: "Rhythm Plus Splamei Client",
+        title: "Rhythm Plus - Splamei Client",
         show: false,
         fullscreenable: true,
         userAgent: clientUserAgent,
@@ -669,7 +669,7 @@ function createWindow()
         }
         else
         {
-            newTitle = title.replace("Rhythm Plus Music Game", "Rhythm Plus Splamei Client").replace("Rhythm+ Music Game", "Rhythm Plus Splamei Client")
+            newTitle = title.replace("Rhythm Plus Music Game", "Rhythm Plus - Splamei Client").replace("Rhythm+ Music Game", "Rhythm Plus - Splamei Client")
         }
 
         mainWindow.setTitle(newTitle);
@@ -715,7 +715,7 @@ function createWindow()
             overrideBrowserWindowOptions: {
                 width: 900,
                 height: 750,
-                title: "Rhythm Plus Splamei Client",
+                title: "Rhythm Plus - Splamei Client",
                 icon: path.join(__dirname, 'assets/icon.png'),
                 autoHideMenuBar: true,
                 fullscreenable: false,
@@ -1083,7 +1083,7 @@ function displayAppMenu()
 function showAboutDialog(parentWindow) {
     dialog.showMessageBox(parentWindow, {
         type: 'info',
-        title: "About - Rhythm Plus Splamei Client",
+        title: "About - Rhythm Plus - Splamei Client",
         message: "About the client",
         detail: `Client: ${app.getVersion()} (${myVerCode})\n\nNode: ${process.versions.node}\nElectron: ${process.versions.electron}\nChromium: ${process.versions.chrome}\nV8: ${process.versions.v8}\n\n----\n\nMade with <3 by Splamei\nLicenced under the Apache Licence`,
         buttons: ['OK']
@@ -1094,7 +1094,7 @@ function showDialogMessage(parentWindow, type, message, detail)
 {
     dialog.showMessageBox(parentWindow, {
         type: type,
-        title: "Rhythm Plus Splamei Client",
+        title: "Rhythm Plus - Splamei Client",
         message: message,
         detail: detail,
         buttons: ['OK']
